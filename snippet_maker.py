@@ -30,7 +30,7 @@ class MakeSnippetCommand(sublime_plugin.TextCommand):
         self.view.window().show_input_panel('File Name', 'Default.sublime-snippet', self.make_snippet, None, None)
 
     def make_snippet(self, file_name):
-        print self.trigger, self.description
+        # print(self.trigger, self.description)
         if len(file_name) > 0:
             file_path = os.path.join(sublime.packages_path(), 'User', file_name)
 
@@ -38,10 +38,10 @@ class MakeSnippetCommand(sublime_plugin.TextCommand):
                 if sublime.ok_cancel_dialog('Override %s?' % file_name) is False:
                     return
 
-            file = open(file_path, "wb")
+            snippet_file = open(file_path, "wb")
             snippet_xml = template % (self.snippet_text, self.trigger, self.description, self.scope)
-            file.write(snippet_xml)
-            file.close()
+            snippet_file.write(bytes(snippet_xml, 'UTF-8'))
+            snippet_file.close()
 
             self.view.window().open_file(file_path)
 
